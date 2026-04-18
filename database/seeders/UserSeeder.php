@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'email'    => 'guru@gmail.com',
             'password' => Hash::make('password'),
             'role'     => 'guru',
-        ]);
+        ]); 
 
         // Siswa
         User::create([
@@ -35,3 +35,4 @@ class UserSeeder extends Seeder
         ]);
     }
 }
+

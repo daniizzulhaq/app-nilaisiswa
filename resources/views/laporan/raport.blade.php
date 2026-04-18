@@ -93,6 +93,8 @@
         font-size: 13px;
         font-weight: 600;
         margin-top: 20px;
+        border: none;
+        cursor: pointer;
     }
     @media print {
         .btn-print, .breadcrumb, .page-header, .btn-secondary {
@@ -114,13 +116,13 @@
             <h1>LAPORAN HASIL BELAJAR</h1>
             <p>Raport Semester Ganjil / Genap</p>
         </div>
-        
+
         <div class="raport-body">
             <div class="info-siswa">
                 <div class="info-item">
-    <div class="info-label">Nama Siswa</div>
-    <div class="info-value">{{ $siswa->nama ?? '-' }}</div>  {{-- ganti siswa->siswa menjadi siswa->nama --}}
-</div>
+                    <div class="info-label">Nama Siswa</div>
+                    <div class="info-value">{{ $siswa->nama ?? '-' }}</div>
+                </div>
                 <div class="info-item">
                     <div class="info-label">NIS</div>
                     <div class="info-value">{{ $siswa->nis ?? '-' }}</div>
@@ -135,6 +137,13 @@
                 </div>
             </div>
 
+            {{-- Debug sementara: hapus setelah field nilai diketahui --}}
+            {{-- @if($siswa->nilai->first())
+                <pre style="font-size:11px; color:red; margin-bottom:16px;">
+                    {{ print_r($siswa->nilai->first()->toArray(), true) }}
+                </pre>
+            @endif --}}
+
             <div class="table-wrap">
                 <table>
                     <thead>
@@ -148,51 +157,45 @@
                     </thead>
                     <tbody>
                         @forelse($siswa->nilai as $index => $n)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $n->mataPelajaran->nama_mapel ?? '-' }}</td>
-                            <td><strong>{{ $n->nilai }}</strong></td>
-                            <td>
-                                @php
-                                    if($n->nilai >= 85) $grade = 'A';
-                                    elseif($n->nilai >= 75) $grade = 'B';
-                                    elseif($n->nilai >= 60) $grade = 'C';
-                                    else $grade = 'D';
-                                @endphp
-                                {{ $grade }}
-                            </td>
-                            <td>
-                                @php
-                                    if($n->nilai >= 85) $predikat = 'Sangat Baik';
-                                    elseif($n->nilai >= 75) $predikat = 'Baik';
-                                    elseif($n->nilai >= 60) $predikat = 'Cukup';
-                                    else $predikat = 'Kurang';
-                                @endphp
-                                {{ $predikat }}
-                            </td>
-                        </tr>
+                            @php
+                                $nilaiValue = $n->nilai_akhir ?? $n->nilai ?? 0;
+
+                                if($nilaiValue >= 85)      { $grade = 'A'; $predikat = 'Sangat Baik'; }
+                                elseif($nilaiValue >= 75)  { $grade = 'B'; $predikat = 'Baik'; }
+                                elseif($nilaiValue >= 60)  { $grade = 'C'; $predikat = 'Cukup'; }
+                                else                       { $grade = 'D'; $predikat = 'Kurang'; }
+                            @endphp
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $n->mataPelajaran->nama_mapel ?? '-' }}</td>
+                                <td><strong>{{ $nilaiValue }}</strong></td>
+                                <td>{{ $grade }}</td>
+                                <td>{{ $predikat }}</td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td colspan="5" style="text-align: center;">Belum ada nilai</td>
-                        </tr>
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--muted);">
+                                    Belum ada nilai
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
 
-            <div style="margin-top: 30px; text-align: center;">
+            <div style="margin-top: 30px; text-align: center; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                 <button onclick="window.print()" class="btn-print">
                     <i class="fas fa-print"></i> Cetak Raport
                 </button>
-              @if(Auth::user()->role === 'siswa')
-    <a href="{{ route('siswa.raport.export.pdf') }}" class="btn-print" style="background: #ef4444;">
-        <i class="fas fa-file-pdf"></i> Download PDF
-    </a>
-@else
-    <a href="{{ route('laporan.export.pdf', $siswa->id) }}" class="btn-print" style="background: #ef4444;">
-        <i class="fas fa-file-pdf"></i> Download PDF
-    </a>
-@endif
+                @if(Auth::user()->role === 'siswa')
+                    <a href="{{ route('siswa.raport.export.pdf') }}" class="btn-print" style="background: #ef4444;">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </a>
+                @else
+                    <a href="{{ route('laporan.export.pdf', $siswa->id) }}" class="btn-print" style="background: #ef4444;">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </a>
+                @endif
             </div>
         </div>
     </div>

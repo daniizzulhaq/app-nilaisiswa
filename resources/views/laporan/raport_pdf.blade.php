@@ -44,10 +44,6 @@
             margin-top: 50px;
             text-align: right;
         }
-        .signature {
-            margin-top: 30px;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -83,31 +79,26 @@
         </thead>
         <tbody>
             @forelse($siswa->nilai as $index => $n)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $n->mataPelajaran->nama_mapel ?? '-' }}</td>
-                <td>{{ $n->nilai }}</td>
-                <td>
-                    @php
-                        if($n->nilai >= 85) echo 'A';
-                        elseif($n->nilai >= 75) echo 'B';
-                        elseif($n->nilai >= 60) echo 'C';
-                        else echo 'D';
-                    @endphp
-                </td>
-                <td>
-                    @php
-                        if($n->nilai >= 85) echo 'Sangat Baik';
-                        elseif($n->nilai >= 75) echo 'Baik';
-                        elseif($n->nilai >= 60) echo 'Cukup';
-                        else echo 'Kurang';
-                    @endphp
-                </td>
-            </tr>
+                @php
+                    // ✅ Konsisten dengan rekap, raport, dan export excel
+                    $nilaiValue = $n->nilai_akhir ?? $n->nilai ?? 0;
+
+                    if($nilaiValue >= 85)      { $grade = 'A'; $predikat = 'Sangat Baik'; }
+                    elseif($nilaiValue >= 75)  { $grade = 'B'; $predikat = 'Baik'; }
+                    elseif($nilaiValue >= 60)  { $grade = 'C'; $predikat = 'Cukup'; }
+                    else                       { $grade = 'D'; $predikat = 'Kurang'; }
+                @endphp
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $n->mataPelajaran->nama_mapel ?? '-' }}</td>
+                    <td>{{ $nilaiValue }}</td>
+                    <td>{{ $grade }}</td>
+                    <td>{{ $predikat }}</td>
+                </tr>
             @empty
-            <tr>
-                <td colspan="5" style="text-align: center;">Belum ada nilai</td>
-            </tr>
+                <tr>
+                    <td colspan="5" style="text-align: center;">Belum ada nilai</td>
+                </tr>
             @endforelse
         </tbody>
     </table>

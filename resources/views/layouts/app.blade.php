@@ -305,9 +305,7 @@
                 <a href="{{ route('laporan.rekap') }}" class="nav-item {{ request()->routeIs('laporan.rekap') ? 'active' : '' }}">
                     <i class="fas fa-table-list"></i> Rekap Kelas
                 </a>
-                <a href="{{ route('laporan.export.excel') }}" class="nav-item">
-                    <i class="fas fa-file-excel"></i> Export Excel
-                </a>
+             
 
                 <div class="nav-section-label">Pengaturan</div>
                 <a href="{{ route('admin.user.index') }}" class="nav-item {{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
