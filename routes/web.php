@@ -38,11 +38,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 
     Route::resource('siswa', SiswaController::class);
     Route::resource('guru', GuruController::class);
-    Route::resource('kelas', KelasController::class);
+    Route::resource('kelas', KelasController::class)->parameters(['kelas' => 'kelas']);
     Route::resource('mata-pelajaran', MataPelajaranController::class)->names('mapel');
     Route::resource('kkm', KkmController::class);
 
-    // ✅ Tambahan user management
     Route::resource('user', UserController::class)->except(['show']);
 });
 
@@ -50,12 +49,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 // ─── Guru ────────────────────────────────────────────────────
 Route::prefix('guru')->name('guru.')->middleware(['auth', 'role:guru'])->group(function () {
 
-    // ✅ Dashboard khusus guru
     Route::get('/dashboard', [GuruDashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('nilai', NilaiController::class);
 
-    // AJAX siswa by kelas
     Route::get('/siswa-by-kelas', function () {
         return response()->json(
             \App\Models\Siswa::where('kelas_id', request('kelas_id'))
@@ -65,6 +62,7 @@ Route::prefix('guru')->name('guru.')->middleware(['auth', 'role:guru'])->group(f
 });
 
 
+// ─── Siswa ───────────────────────────────────────────────────
 Route::prefix('siswa')->name('siswa.')->middleware(['auth', 'role:siswa'])->group(function () {
 
     Route::get('/dashboard', [NilaiSiswaController::class, 'index'])->name('dashboard');
@@ -72,10 +70,10 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth', 'role:siswa'])->grou
     Route::get('/nilai/{semester}/{tahun_ajaran}', [NilaiSiswaController::class, 'show'])
         ->name('nilai.detail');
 
-    // ✅ Tambahkan ini
     Route::get('/raport', [NilaiSiswaController::class, 'raport'])->name('raport');
     Route::get('/raport/export-pdf', [NilaiSiswaController::class, 'exportPdf'])->name('raport.export.pdf');
 });
+
 
 // ─── Laporan ─────────────────────────────────────────────────
 Route::prefix('laporan')->name('laporan.')->middleware(['auth', 'role:admin,guru'])->group(function () {
