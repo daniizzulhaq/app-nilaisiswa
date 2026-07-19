@@ -50,9 +50,9 @@
         display: grid; place-items: center;
         font-size: 11px; font-weight: 700; color: #fff;
     }
-    .kelas-info-badge .avatar.X   { background: linear-gradient(135deg, #4f8ef7, #7c6af7); }
-    .kelas-info-badge .avatar.XI  { background: linear-gradient(135deg, #f59e0b, #f97316); }
-    .kelas-info-badge .avatar.XII { background: linear-gradient(135deg, #10b981, #0ea5e9); }
+    .kelas-info-badge .avatar.a7 { background: linear-gradient(135deg, #4f8ef7, #7c6af7); }
+    .kelas-info-badge .avatar.a8 { background: linear-gradient(135deg, #f59e0b, #f97316); }
+    .kelas-info-badge .avatar.a9 { background: linear-gradient(135deg, #10b981, #0ea5e9); }
     .kelas-info-badge .info-name  { font-size: 13px; font-weight: 600; color: var(--text); }
     .kelas-info-badge .info-sub   { font-size: 11.5px; color: var(--muted); }
 
@@ -113,7 +113,7 @@
 
     {{-- Current kelas info --}}
     <div class="kelas-info-badge">
-        <div class="avatar {{ $kelas->tingkat }}">{{ $kelas->tingkat }}</div>
+        <div class="avatar a{{ $kelas->tingkat }}">{{ $kelas->tingkat }}</div>
         <div>
             <div class="info-name">{{ $kelas->nama_kelas }}</div>
             <div class="info-sub">{{ $kelas->tahun_ajaran }} &middot; {{ $kelas->siswa_count ?? 0 }} siswa</div>
@@ -130,7 +130,7 @@
             <input type="text" id="nama_kelas" name="nama_kelas"
                    class="form-control @error('nama_kelas') is-invalid @enderror"
                    value="{{ old('nama_kelas', $kelas->nama_kelas) }}"
-                   placeholder="Contoh: X-A, XI IPA 1, XII IPS 2"
+                   placeholder="Contoh: 7A, 8B, 9C"
                    autofocus>
             @error('nama_kelas')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -144,7 +144,7 @@
                 <select id="tingkat" name="tingkat"
                         class="form-select @error('tingkat') is-invalid @enderror">
                     <option value="" disabled>-- Pilih Tingkat --</option>
-                    @foreach(['X', 'XI', 'XII'] as $t)
+                    @foreach(['7', '8', '9'] as $t)
                         <option value="{{ $t }}" {{ old('tingkat', $kelas->tingkat) === $t ? 'selected' : '' }}>
                             Kelas {{ $t }}
                         </option>

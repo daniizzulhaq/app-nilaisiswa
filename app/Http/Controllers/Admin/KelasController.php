@@ -22,7 +22,7 @@ class KelasController extends Controller
     {
         $request->validate([
             'nama_kelas'   => 'required|string|max:50',
-            'tingkat'      => 'required|in:X,XI,XII',
+            'tingkat'      => 'required|in:7,8,9',
             'tahun_ajaran' => 'required|string|max:10',
         ]);
 
@@ -46,7 +46,7 @@ class KelasController extends Controller
     {
         $request->validate([
             'nama_kelas'   => 'required|string|max:50',
-            'tingkat'      => 'required|in:X,XI,XII',
+            'tingkat'      => 'required|in:7,8,9',
             'tahun_ajaran' => 'required|string|max:10',
         ]);
 

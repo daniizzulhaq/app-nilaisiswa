@@ -102,6 +102,7 @@
             <input type="text" id="nama_kelas" name="nama_kelas"
                    class="form-control @error('nama_kelas') is-invalid @enderror"
                    value="{{ old('nama_kelas') }}"
+                   placeholder="Contoh: 7A, 8B, 9C"
                    autofocus>
             @error('nama_kelas')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -117,7 +118,6 @@
                 <select id="tingkat" name="tingkat"
                         class="form-select @error('tingkat') is-invalid @enderror">
                     <option value="" disabled {{ old('tingkat') ? '' : 'selected' }}>-- Pilih Tingkat --</option>
-                    {{-- Sesudah --}}
                     @foreach(['7', '8', '9'] as $t)
                         <option value="{{ $t }}" {{ old('tingkat') === $t ? 'selected' : '' }}>
                             Kelas {{ $t }}
